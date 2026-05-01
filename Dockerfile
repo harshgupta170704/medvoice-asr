@@ -43,7 +43,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     WHISPER_MODEL_DIR="/models/whisper" \
     WHISPER_ONNX_DIR="/models/whisper_onnx" \
     BIOBERT_MODEL_DIR="/models/biobert" \
-    USE_ONNX="true"
+    USE_ONNX="true" \
+    HF_HOME="/models/cache"
 
 WORKDIR /app
 
@@ -61,8 +62,8 @@ COPY app/ ./app/
 COPY export/ ./export/
 COPY scripts/ ./scripts/
 
-# Create model directories (populated via volume mount in production)
-RUN mkdir -p /models/whisper /models/whisper_onnx /models/biobert
+# Create model directories and explicit cache directory
+RUN mkdir -p /models/whisper /models/whisper_onnx /models/biobert /models/cache
 
 # Pre-download default HF models into the image cache. 
 # This prevents Render from timing out during the 60-second boot window.
