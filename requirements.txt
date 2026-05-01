@@ -1,0 +1,44 @@
+# ─── Core ML / ASR ────────────────────────────────────────────────────
+torch
+torchaudio
+transformers
+datasets
+tokenizers
+evaluate
+jiwer
+
+# ─── Whisper ──────────────────────────────────────────────────────────
+openai-whisper
+
+# ─── ONNX Export & Quantization ───────────────────────────────────────
+onnx
+onnxruntime
+optimum[onnxruntime]
+
+# ─── NER / BioBERT ────────────────────────────────────────────────────
+seqeval
+accelerate
+peft
+
+# ─── FastAPI Backend ──────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+
+# ─── Audio Processing ─────────────────────────────────────────────────
+librosa
+soundfile
+ffmpeg-python
+
+# ─── Data / Utils ─────────────────────────────────────────────────────
+numpy
+pandas
+scikit-learn
+tqdm
+huggingface_hub
+
+# ─── Notebooks ────────────────────────────────────────────────────────
+jupyter
+ipywidgets
+matplotlib

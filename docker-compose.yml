@@ -1,0 +1,72 @@
+version: "3.9"
+
+# ──────────────────────────────────────────────────────────────────────
+# MedVoice ASR – docker-compose
+# ──────────────────────────────────────────────────────────────────────
+# Services:
+#   medvoice-api  – FastAPI inference server
+#   (optional) nginx – reverse proxy / TLS termination
+#
+# Usage:
+#   docker-compose up --build
+#   docker-compose up -d          # detached
+#   docker-compose logs -f        # stream logs
+# ──────────────────────────────────────────────────────────────────────
+
+services:
+  medvoice-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: medvoice-asr:latest
+    container_name: medvoice_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Model paths inside the container (mapped from host via volumes)
+      WHISPER_MODEL_DIR: /models/whisper
+      WHISPER_ONNX_DIR:  /models/whisper_onnx
+      BIOBERT_MODEL_DIR: /models/biobert
+      USE_ONNX: "true"
+      # Uncomment to override log level
+      # LOG_LEVEL: debug
+    volumes:
+      # Mount your trained model directories from the host.
+      # Replace ./models/... with the actual paths if different.
+      - ./models/whisper:/models/whisper:ro
+      - ./models/whisper_onnx:/models/whisper_onnx:ro
+      - ./models/biobert:/models/biobert:ro
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    deploy:
+      resources:
+        limits:
+          memory: 8G          # Adjust based on available RAM
+        reservations:
+          memory: 4G
+
+  # ── Optional: simple Nginx reverse proxy ───────────────────────────
+  # Uncomment to expose on port 80 and add rate-limiting.
+  # nginx:
+  #   image: nginx:1.25-alpine
+  #   container_name: medvoice_nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  #   depends_on:
+  #     medvoice-api:
+  #       condition: service_healthy
+  #   restart: unless-stopped
+
+volumes: {}
+networks:
+  default:
+    name: medvoice_net
