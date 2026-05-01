@@ -107,7 +107,15 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 Navigate to **http://localhost:8000/docs** to see the interactive Swagger UI.
 
 ### Example Request
-Use `curl` to test the `/transcribe` endpoint with a `.wav` or `.mp3` file:
+You can test the `/transcribe` endpoint directly from your browser using the interactive Swagger UI:
+
+<div align="center">
+  <img src="docs/api_request.png" alt="API Request Example" width="800"/>
+  <br/>
+  <img src="docs/api_response.png" alt="API Response Example" width="800"/>
+</div>
+
+Alternatively, use `curl` to test the endpoint from your terminal with a `.wav` or `.mp3` file:
 
 ```bash
 curl -X 'POST' \
