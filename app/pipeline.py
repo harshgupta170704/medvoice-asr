@@ -70,7 +70,7 @@ class WhisperASR:
         model_dir = WHISPER_MODEL_DIR
         if not (Path(model_dir) / "preprocessor_config.json").exists():
             # Use HuggingFace hub pretrained model if no local checkpoint
-            model_dir = "openai/whisper-small"
+            model_dir = "openai/whisper-tiny"
             logger.info("No local Whisper checkpoint found; using %s", model_dir)
 
         from transformers import WhisperForConditionalGeneration, WhisperProcessor
